@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
+import {button, Grid, Row, Col} from 'react-bootstrap'; 
 
 
 const style = {
-    margin: 12,
+margin: 12,
   };
 
 class Signup extends Component {
@@ -57,12 +58,10 @@ render() {
           password.length > 0;
 
     return (
-        <div>
-            <h1>Please Sign Up</h1>
-                <TextField id="email" hintText="ID" value={this.state.email} onChange={this.handleChange}/><br />
-                <TextField id="password" hintText="Password" value={this.state.password} onChange={this.handleChange}/><br />
-                <RaisedButton label="Sign Up" style={style} disabled={!enabled} onClick={()=>{this.handleSignup() }}/>
-                
+        <div style={{textAlign: 'center'}} >
+            <TextField id="email" hintText="ID" value={this.state.email} onChange={this.handleChange}/><br />
+            <TextField id="password" hintText="Password" value={this.state.password} onChange={this.handleChange}/><br />
+            <RaisedButton label="Sign Up" style={style} disabled={!enabled} onClick={()=>{this.handleSignup() }}/>
         </div>
     );
 }

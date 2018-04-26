@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
+import {button, Grid, Row, Col} from 'react-bootstrap'; 
 
 
 const style = {
@@ -58,12 +59,10 @@ render() {
           password.length > 0;
 
     return (
-        <div>
-            <h1>Please Log In</h1>
-                <TextField id="email" hintText="ID" value={this.state.email} onChange={this.handleChange}/><br />
-                <TextField id="password" hintText="Password" value={this.state.password} onChange={this.handleChange}/><br />
-                <RaisedButton label="Log In" style={style} disabled={!enabled} onClick={()=>{this.handleLogin() }}/>
-                
+        <div style={{textAlign: 'center'}} >
+            <TextField id="email" hintText="ID" value={this.state.email} onChange={this.handleChange}/><br />
+            <TextField id="password" hintText="Password" value={this.state.password} onChange={this.handleChange}/><br />
+            <RaisedButton label="Log In" style={style} disabled={!enabled} onClick={()=>{this.handleLogin() }}/>
         </div>
     );
 }

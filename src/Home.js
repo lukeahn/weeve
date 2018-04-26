@@ -1,9 +1,10 @@
 import React from 'react'
+import {Button, Grid, Row, Col, FormGroup, FormControl, ControlLabel} from 'react-bootstrap'; 
 
 const Home = () => (
-  <div>
-    <h1>Welcome to the Weeve Website!</h1>
-  </div>
+  <Grid>
+    <h1>Welcome</h1>
+  </Grid>
 )
 
 export default Home

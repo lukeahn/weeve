@@ -4,6 +4,8 @@ import Home from './Home'
 import Login from './Login'
 import Signup from './Signup'
 import Editor from './Editor'
+import Search from './Search'
+
 
 // The Main component renders one of the three provided
 // Routes (provided that one matches). Both the /roster
@@ -14,6 +16,7 @@ const Main = () => (
   <main>
     <Switch>
       <Route exact path='/' component={Home}/>
+      <Route path='/search' component={Search}/>
       <Route path='/signup' component={Signup}/>
       <Route path='/login' component={Login}/>
       <Route path='/editor' component={Editor}/>
