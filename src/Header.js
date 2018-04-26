@@ -1,9 +1,41 @@
 import React, {Component} from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Redirect,withRouter } from 'react-router-dom'
 import Slider from 'material-ui/Slider';
 import {Button, Grid, Row, Col,Nav, Navbar, NavItem, NavDropdown, MenuItem} from 'react-bootstrap'; 
 import logo from './weeve.png';
 
+
+
+
+const NavLogin = withRouter(({ history }) => (
+    <div onClick={() => { history.push('/login') }}>
+        Login
+    </div>
+))
+
+const NavSignup = withRouter(({ history }) => (
+<div onClick={() => { history.push('/signup') }}>
+    Signup
+</div>
+))
+
+const NavSearch = withRouter(({ history }) => (
+    <div onClick={() => { history.push('/search') }}>
+        Search
+    </div>
+))
+
+const NavEditor = withRouter(({ history }) => (
+    <div onClick={() => { history.push('/editor') }}>
+        Editor
+    </div>
+))
+
+const NavProfile = withRouter(({ history }) => (
+    <div onClick={() => { history.push('/profile') }}>
+        Profile
+    </div>
+))
 
 
 
@@ -14,91 +46,74 @@ class Header extends Component {
         super(props);
         this.state = {
             component: null,
-      
+            login: false,
         };
     }
 
-
-
-    handleActive(tab) {
-        alert(`A tab with this route property ${tab.props['data-route']} was activated.`);
+   
+    
+    handleSelect(eventKey) {
+    alert(`selected ${eventKey}`);
     }
+    
 
     render() {
+        if (this.state.login === true) {
+            return <Redirect push to='/login' />
+          }
+        else 
+      
         return (
+            
             <Navbar inverse collapseOnSelect>
 
                 <Navbar.Collapse>
                     <Nav>
-                        <NavItem eventKey={1} href="search">
-                            <a href="/"><img style={{height:30, weight:30}} src={logo} alt="weeve"/></a>
+                        <NavItem href="/">
+                           <img style={{height:30, weight:30}} src={logo} alt="weeve"/>
                         </NavItem>
                     </Nav>
                     <Nav>
-                        <NavItem eventKey={1} href="search">
-                            Search
+                        <NavItem >
+                            <NavSearch />
                         </NavItem>
                     </Nav>
                     <Nav>
-                        <NavItem eventKey={1} href="editor">
-                            Editor
+                        <NavItem >
+                            <NavEditor />
                         </NavItem>
                     </Nav>
                     <Nav>
-                        <NavItem eventKey={1} href="#">
+                        <NavItem >
                             TBD
                         </NavItem>
                     </Nav>
                     <Nav>
-                        <NavItem eventKey={1} href="#">
+                        <NavItem >
                             TBD
                         </NavItem>
                     </Nav>
 
                     <Nav pullRight>
-                        <NavItem eventKey={1} href="profile">
-                            Profile 
+                        <NavItem >
+                            <NavProfile /> 
                         </NavItem>
                     </Nav>
 
                     <Nav pullRight>
-                        <NavItem eventKey={1} href="login">
-                            Login
+                        <NavItem >
+                            <NavLogin />
                         </NavItem>
                     </Nav>
 
                     <Nav pullRight>
-                        <NavItem eventKey={1} href="signup">
-                            Signup
+                        <NavItem >
+                            <NavSignup />
                         </NavItem>
                     </Nav>
                 </Navbar.Collapse>
                 </Navbar>
-            // <Grid style={{paddingBottom:50}}>
-            //     <Row style={{backgroundColor: '#C9C5C5'}}>
-            //         <Col md={2}>
-            //             <Link to='/search'> <Button bsSize="large"> Search </Button></Link>
-            //         </Col>
-            //         <Col md={2}>
-            //             <Link to='/editor'> <Button bsSize="large"> Editor </Button> </Link>
-            //         </Col>
-            //         <Col md={2}>
-            //             <Button  bsSize="large"> TBD </Button>
-            //         </Col>
-                    
-            //         <Col md={2}>
-            //             <Link to='/login'> <Button bsSize="large"> Login </Button> </Link>
-            //         </Col>
-            //         <Col md={2}>
-            //             <Link to='/signup'> <Button bsSize="large"> Signup </Button> </Link>
-            //         </Col>
 
-            //         <Col md={2}>
-            //             <img style={{height:30, weight:30}} src={logo} alt="weeve"/>
-            //         </Col>
-            //     </Row>
-                
-            // </Grid>
         )
     }
 }
