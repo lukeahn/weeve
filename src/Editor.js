@@ -2,17 +2,20 @@ import React, {Component} from 'react'
 import { Editor } from 'react-draft-wysiwyg';
 import { EditorState, Blocks, Data } from 'draft-js';
 import '../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import {Button, Grid, Row, Col, FormGroup, FormControl, ControlLabel} from 'react-bootstrap'; 
+import { Grid, Row, Col, FormGroup, FormControl, ControlLabel} from 'react-bootstrap';
 import { RichUtils } from 'draft-js';
 import request from 'superagent';
 import { WithContext as ReactTags } from 'react-tag-input';
 import zen from './zen.jpg';
+import './Editor.css';
+import {Button, Icon, Chip} from 'react-materialize'
+
 
 const EditorComponent = () => <Editor />
 
 
 class KnowledgeEditor extends Component {
-  
+
     constructor(props) {
         super(props);
 
@@ -39,6 +42,7 @@ class KnowledgeEditor extends Component {
             data: data || Data,
             view: 'edit',
             saved: false,
+            users:"Zen",
             tags: [
                 { id: "Credentials", text: "Credentials" },
                 { id: "GCP", text: "GCP" }
@@ -60,7 +64,7 @@ class KnowledgeEditor extends Component {
         this.renderUser= this.renderUser.bind(this);
         this.addUsers= this.addUsers.bind(this);
     }
-  
+
 
     save(){
         console.log("called");
@@ -78,7 +82,7 @@ class KnowledgeEditor extends Component {
           headers: {
             "Content-Type": 'application/json',
             "Authorization": "bearer " + TOKEN,
-      
+
           },
           body: JSON.stringify({
           "title":"luke",
@@ -86,7 +90,7 @@ class KnowledgeEditor extends Component {
           "explicit_tags":["testing","with","luca"],
           "collaborators": [1]
       })
-          
+
         })
     }
     handleDelete(i) {
@@ -143,17 +147,20 @@ class KnowledgeEditor extends Component {
                </div>
                </div>
     }
-    renderUser(){       
-        const { tags, suggestions } = this.state;
-        return(<div className="sidepanel">
-        
-        <ReactTags tags={tags}
-            suggestions={suggestions}
-            handleDelete={this.handleDelete}
-            handleAddition={this.handleAddition}
-            handleDrag={this.handleDrag} />
-            <p><img src={zen} style={{height:30, weight:30}} alt="zen"></img> Zen Yui, Data Engineer </p>
-        </div>
+    renderUser(){
+        const {tags} = this.state.users;
+        return(
+          <div className="sideUser">
+
+        <Row>
+        <Col s={12}>
+          <Chip>
+            <img src={zen} alt='Zen Yui' />
+            Zen Yui
+          </Chip>
+        </Col>
+      </Row>
+      </div>
         )
     }
 
@@ -174,29 +181,29 @@ class KnowledgeEditor extends Component {
 
        )
     }
-    
+
     renderSide(){
        const { tags, suggestions } = this.state;
        return (
-           <div className="sidepanel">
-                           <ReactTags tags={tags}
-                               suggestions={suggestions}
-                               handleDelete={this.handleDelete}
-                               handleAddition={this.handleAddition}
-                               handleDrag={this.handleDrag} />
-            </div>
+         <div className="sidepanel">
+         <ReactTags tags={tags}
+             suggestions={suggestions}
+             handleDelete={this.handleDelete}
+             handleAddition={this.handleAddition}
+             handleDrag={this.handleDrag} />
+        </div>
 
        )
     }
-  
 
-    render() {       
+
+    render() {
         const {data, view, saved} = this.state;
     //   const { editorState } = this.state;
         return (
             <Grid>
                 <div className="flex-container">
-                
+
                     {this.renderSide()}
                     {this.renderUser()}
                     <div className="container-content" style={{display: view==='json' ? 'block' : 'none'}}>
@@ -228,25 +235,31 @@ class KnowledgeEditor extends Component {
                             </div>
                         </div>
                     </div>
+                    <Row className="show-grid">
                     <button className={"button"+(view==='json'?' active':'')} onClick={()=>this.setState({view: 'json'})}>
                         See JSON
                     </button>
                     <button className={"button"+(view==='edit'?' active':'')} onClick={()=>this.setState({view: 'edit'})}>
                         See Editor
                     </button>
-                    <button className="button" onClick={() =>{this.save() }}>
-                        {saved ? 'Saved!' : 'Save'}
-                    </button>
-                    <button className="button" onClick={(v)=>this.setState({data:null})}>
-                        Clear 
-                    </button>
+                    <Col xs={1} xsOffset={8}>
+                      <Button waves="light" onClick={() =>{this.save() }}>
+                          {saved ? 'Saved!' : 'Save'}
+                      </Button>
+                    </Col>
+
+                    <Button waves="light" onClick={(v)=>this.setState({data:null})}>
+                        Clear
+                    </Button>
+                    </Row>
                 </div>
             </Grid>
+
         );
     }
   }
 
-  
+
 
 
 export default KnowledgeEditor
