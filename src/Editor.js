@@ -6,10 +6,10 @@ import { Grid, Row, Col, FormGroup, FormControl, ControlLabel} from 'react-boots
 import { RichUtils } from 'draft-js';
 import request from 'superagent';
 import { WithContext as ReactTags } from 'react-tag-input';
-import zen from './zen.jpg';
-import jill from './jill.png';
 import './Editor.css';
 import {Button, Icon, Chip, Input} from 'react-materialize'
+import update from 'react-addons-update'; // ES6
+
 
 
 const EditorComponent = () => <Editor />
@@ -44,8 +44,8 @@ class KnowledgeEditor extends Component {
             view: 'edit',
             saved: false,
             users:[
-                    { name:"Zen Yui", pic:"zen" },
-                    { name:"Jill Sue", pic:"jill"}
+                    { name:"Zen Yui", pic:"./Pictures/zen.jpg" },
+                    { name:"Jill Sue", pic:"./Pictures/jill.png"}
                   ],
             tags: [
                 { id: "Credentials", text: "Credentials" },
@@ -62,9 +62,9 @@ class KnowledgeEditor extends Component {
 
         }
         this.handleDelete = this.handleDelete.bind(this);
+        this.handleDeleteUsers = this.handleDeleteUsers.bind(this);
         this.handleAddition = this.handleAddition.bind(this);
         this.handleDrag = this.handleDrag.bind(this);
-        this.renderLogo= this.renderLogo.bind(this);
         this.renderUser= this.renderUser.bind(this);
         this.addTags= this.addTags.bind(this);
     }
@@ -97,6 +97,12 @@ class KnowledgeEditor extends Component {
 
         })
     }
+    handleDeleteUsers(user) {
+            const { users } = this.state;
+            this.setState({
+             users: users.filter((state_user) => state_user !== user),
+            });
+        }
     handleDelete(i) {
             const { tags } = this.state;
             this.setState({
@@ -144,18 +150,11 @@ class KnowledgeEditor extends Component {
         return {};
     }
 
-    renderLogo(){
-        return <div className="row, my_text">
-               <div className="col-sm-offset-10">
-               <div className="avatar"> <img src={zen} style={{height:30, weight:30}} alt="zen"></img></div>
-               </div>
-               </div>
-    }
     User(user){
       return(
-        <Col s={4}>
-          <Chip>
-            <img src={zen} alt='Zen Yui Pic' />
+        <Col onClick={() =>{this.handleDeleteUsers(user)}} s={4}>
+          <Chip >
+            <img src={require(""+user.pic+"")}  alt='Zen Yui Pic' />
             {user.name}
           </Chip>
         </Col>
@@ -199,7 +198,17 @@ class KnowledgeEditor extends Component {
 
        )
     }
+    _handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+          console.log(e.target.value)
+          var newArray = this.state.users.slice();
+          newArray.push({"name":e.target.value ,"pic":"./Pictures/user.png"});
+          this.setState({users:newArray})
+          console.log(this.state)
+          this.setState({form: null}); // <-- reset value
 
+        }
+      }
 
     render() {
         const {data, view, saved} = this.state;
@@ -210,8 +219,12 @@ class KnowledgeEditor extends Component {
 
                     {this.renderSide()}
                     <Row>
-                      <Col s={12}>
-                        <Input  s={6} label="Add User" />
+                      <Col s={12} className ="sideUser">
+                        <Input  onKeyDown={this._handleKeyPress}
+                                value={this.state.form}
+                                s={6}
+                                label="Add User"
+                        />
                       </Col>
                       </Row>
                     <Row>
