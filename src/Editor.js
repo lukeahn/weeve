@@ -7,8 +7,9 @@ import { RichUtils } from 'draft-js';
 import request from 'superagent';
 import { WithContext as ReactTags } from 'react-tag-input';
 import zen from './zen.jpg';
+import jill from './jill.png';
 import './Editor.css';
-import {Button, Icon, Chip} from 'react-materialize'
+import {Button, Icon, Chip, Input} from 'react-materialize'
 
 
 const EditorComponent = () => <Editor />
@@ -42,7 +43,10 @@ class KnowledgeEditor extends Component {
             data: data || Data,
             view: 'edit',
             saved: false,
-            users:"Zen",
+            users:[
+                    { name:"Zen Yui", pic:"zen" },
+                    { name:"Jill Sue", pic:"jill"}
+                  ],
             tags: [
                 { id: "Credentials", text: "Credentials" },
                 { id: "GCP", text: "GCP" }
@@ -62,7 +66,7 @@ class KnowledgeEditor extends Component {
         this.handleDrag = this.handleDrag.bind(this);
         this.renderLogo= this.renderLogo.bind(this);
         this.renderUser= this.renderUser.bind(this);
-        this.addUsers= this.addUsers.bind(this);
+        this.addTags= this.addTags.bind(this);
     }
 
 
@@ -147,29 +151,29 @@ class KnowledgeEditor extends Component {
                </div>
                </div>
     }
-    renderUser(){
-        const {tags} = this.state.users;
-        return(
-          <div className="sideUser">
-
-        <Row>
-        <Col s={12}>
+    User(user){
+      return(
+        <Col s={4}>
           <Chip>
-            <img src={zen} alt='Zen Yui' />
-            Zen Yui
+            <img src={zen} alt='Zen Yui Pic' />
+            {user.name}
           </Chip>
         </Col>
-      </Row>
-      </div>
-        )
+  )
     }
 
-    addUsers(){
+    renderUser= ()=> {
+      return this.state.users.map((item,i)=>{
+        return this.User(item)
+      })
+    }
+
+    addTags(){
        const { tags, suggestions } = this.state;
        return (
           <div className="row margin-top">
             <div className="col-sm-offset-10 col-sm-1">
-             <div className="addUsers">
+             <div className="addTags">
                              <ReactTags tags={tags}
                                  suggestions={suggestions}
                                  handleDelete={this.handleDelete}
@@ -205,7 +209,14 @@ class KnowledgeEditor extends Component {
                 <div className="flex-container">
 
                     {this.renderSide()}
-                    {this.renderUser()}
+                    <Row>
+                      <Col s={12}>
+                        <Input  s={6} label="Add User" />
+                      </Col>
+                      </Row>
+                    <Row>
+                      {this.renderUser()}
+                    </Row>
                     <div className="container-content" style={{display: view==='json' ? 'block' : 'none'}}>
                         <pre style={{whiteSpace: 'pre-wrap', width: '750px', margin: 'auto'}}>{JSON.stringify(data, null, 3)}</pre>
                     </div>
