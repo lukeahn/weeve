@@ -102,6 +102,28 @@ class Experts extends React.Component{
   }
 }
 
+class Tags extends React.Component{
+  render(){
+  return(
+      <Col  xsOffset={2} sm={4} >
+        <div class="card">
+          <div class="card-content">
+            <span class="card-title">Filter your Tags</span>
+          </div>
+          <div class="card-action margin-bottom-neg">
+             <Input name='group1' type='checkbox' value='PressRelease' label='PressRelease' />
+             <Input name='group1' type='checkbox' value='FDA' label='FDA'  className='filled-in' defaultChecked='checked' />
+             <Input name='group1' type='checkbox' value='News' label='News' className='filled-in' defaultChecked='checked' />
+             <Input name='on' type='date' label="Date" onChange={function(e, value) {}} />
+          </div>
+          <div class="card-action">
+          </div>
+        </div>
+      </Col>
+
+
+  )}
+}
 
 class Search extends React.Component {
 render(){
@@ -116,6 +138,7 @@ render(){
           </Row>
           <Row>
           <Card/>
+          <Tags/>
           </Row>
           <Card/>
 
