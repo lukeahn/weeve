@@ -15,7 +15,6 @@ import update from 'react-addons-update'; // ES6
 import draftToHtml from 'draftjs-to-html';
 
 
-// const EditorComponent = () => <Editor />
 
 
 class KnowledgeEditor extends Component {
@@ -42,19 +41,21 @@ class KnowledgeEditor extends Component {
         else{
             data = null;
         }
+
         this.onChange = (editorState) => this.setState({editorState});
+       
+
         this.state = {
             data: data || Data,
             view: 'edit',
             saved: false,
+            title: null,
             users:[
-                    { name:"Zen Yui", pic:"./Pictures/zen.jpg" },
-                    { name:"Jill Sue", pic:"./Pictures/jill.png"}
+                    { name:"Zen Yui", pic:"./Pictures/zen.jpg", userId:"1"},
+                    { name:"Jill Sue", pic:"./Pictures/jill.png", userId:"2"}
                   ],
-            tags: [
-                { id: "Credentials", text: "Credentials" },
-                { id: "GCP", text: "GCP" }
-             ],
+            collaborators:[],
+            tags: [],
             suggestions: [
                 { id: 'AWS', text: 'AWS' },
                 { id: 'Meeting', text: 'Meeting' },
@@ -66,6 +67,7 @@ class KnowledgeEditor extends Component {
              editorState: EditorState.createEmpty()
 
         }
+        
         this.handleDelete = this.handleDelete.bind(this);
         this.handleDeleteUsers = this.handleDeleteUsers.bind(this);
         this.handleAddition = this.handleAddition.bind(this);
@@ -76,32 +78,26 @@ class KnowledgeEditor extends Component {
 
 
     save(){
-        console.log("called");
-        var TOKEN=localStorage.getItem("tokenID");
+        for (var x in this.state.users) {
+            this.state.collaborators.push(this.state.users[x].userId)
+        }        
+        var TOKEN = localStorage.getItem("tokenID");
         localStorage.setItem("data", JSON.stringify(this.state.data));
         localStorage.setItem("hash", this.hash);
         var sendingData = {}
-        sendingData["collaborators"]=[1]
-        sendingData["title"]="title"
-        sendingData["explicit_tags"]= ["testing","with","marco"]
-        sendingData["body"]="this.state.data"
+        sendingData["collaborators"]= this.state.collaborators
+        sendingData["title"]=this.state.title
+        sendingData["explicit_tags"]= this.state.tags
+        sendingData["body"]= JSON.stringify(this.state.data)
 
         fetch('http://localhost:8080/post/', {
-          method: 'POST',
-          headers: {
-            "Content-Type": 'application/json',
-            "Authorization": "bearer " + TOKEN,
-
-          },
-          body: JSON.stringify({
-          "title":"luke",
-          "body":"body",
-          "explicit_tags":["testing","with","luca"],
-          "collaborators": [1]
-      })
-
+            method: 'POST',
+            headers: {
+                "Content-Type": 'application/json',
+                "Authorization": "bearer " + TOKEN,
+            },
+            body: JSON.stringify(sendingData)
     })
-    
 }
     handleDeleteUsers(user) {
             const { users } = this.state;
@@ -116,21 +112,21 @@ class KnowledgeEditor extends Component {
             });
         }
 
-        handleAddition(tag) {
-            const { tags } = this.state;
-            this.setState({tags: [...tags, ...[tag]] });
-        }
+    handleAddition(tag) {
+        const { tags } = this.state;
+        this.setState({tags: [...tags, ...[tag]] });
+    }
 
-        handleDrag(tag, currPos, newPos) {
-            const tags = [...this.state.tags];
-            const newTags = tags.slice();
+    handleDrag(tag, currPos, newPos) {
+        const tags = [...this.state.tags];
+        const newTags = tags.slice();
 
-            newTags.splice(currPos, 1);
-            newTags.splice(newPos, 0, tag);
+        newTags.splice(currPos, 1);
+        newTags.splice(newPos, 0, tag);
 
-            // re-render
-            this.setState({ tags: newTags });
-        }
+        // re-render
+        this.setState({ tags: newTags });
+    }
     upload = (data, success, failed, progress) => {
         console.log(data.formData);
         request.post('/upload')
@@ -168,26 +164,25 @@ class KnowledgeEditor extends Component {
     }
 
     renderUser= ()=> {
-      return this.state.users.map((item,i)=>{
-        return this.User(item)
-      })
+        return this.state.users.map((item,i)=>{
+            return this.User(item)
+        })
     }
 
     addTags(){
        const { tags, suggestions } = this.state;
        return (
-          <div className="row margin-top">
+       <div className="row margin-top">
             <div className="col-sm-offset-10 col-sm-1">
-             <div className="addTags">
-                             <ReactTags tags={tags}
-                                 suggestions={suggestions}
-                                 handleDelete={this.handleDelete}
-                                 handleAddition={this.handleAddition}
-                                 handleDrag={this.handleDrag} />
-              </div>
-             </div>
+                <div className="addTags">
+                    <ReactTags tags={tags}
+                        suggestions={suggestions}
+                        handleDelete={this.handleDelete}
+                        handleAddition={this.handleAddition}
+                        handleDrag={this.handleDrag} />
+                </div>
             </div>
-
+        </div>
        )
     }
 
@@ -208,34 +203,40 @@ class KnowledgeEditor extends Component {
         if (e.key === 'Enter') {
           console.log(e.target.value)
           var newArray = this.state.users.slice();
-          newArray.push({"name":e.target.value ,"pic":"./Pictures/user.png"});
+          newArray.push({"name":e.target.value ,"pic":"./Pictures/user.png", "userId": "3"}); //hardcoded. need to remove.
           this.setState({users:newArray})
           console.log(this.state)
-          this.setState({form: null}); // <-- reset value
-
+          this.setState({form: ""}); 
         }
-      }
-
+    }
+    _handleChange = event => {
+        this.setState({
+        [event.target.id]: event.target.value
+        });
+    }
+    
+    
     render() {
         const {data, view, saved} = this.state;
         const { editorState } = this.state;
 
-        // const rawContentState = convertToRaw(editorState.getCurrentContent());
-
         return (
             <Grid>
                 <div className="flex-container">
-
                     {this.renderSide()}
+                    
                     <Row>
-                      <Col s={12} className ="sideUser">
-                        <Input  onKeyDown={this._handleKeyPress}
-                                value={this.state.form}
-                                s={6}
-                                label="Add User"
-                        />
-                      </Col>
-                      </Row>
+                        <Input id="title" type="search" label="What is the title?" s={12} onChange={this._handleChange} />
+                    </Row>
+                    <Row>
+                        <Col s={12} className ="sideUser">
+                            <Input  onKeyDown={this._handleKeyPress}
+                                    value={this.state.form}
+                                    s={6}
+                                    label="Add User"
+                            />
+                        </Col>
+                    </Row>
                     <Row>
                       {this.renderUser()}
                     </Row>
@@ -245,11 +246,15 @@ class KnowledgeEditor extends Component {
                     <div className="container-content" style={{display: view!=='json' ? 'block' : 'none'}}>
                         <div className="TeXEditor-root">
                             <div className="TeXEditor-editor">
-                                <Editor onChange={data=>this.setState({data})}
+                                <Editor 
+                                        disabledToolbar={true}
+
+                                        onChange={data=>this.setState({data})}
                                         value={data}
                                         blockTypes={Blocks}
                                         cleanupTypes="*"
                                         sidebar={0}
+                                        // readOnly={true}
                                         handleDefaultData={this.defaultData}
                                         handleUpload={this.upload}
                                         toolbar={{

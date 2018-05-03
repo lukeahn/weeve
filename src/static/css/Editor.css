@@ -61,5 +61,9 @@ div.ReactTags__suggestions ul li.ReactTags__activeSuggestion {
     cursor: pointer;
 }
 .sideUser{
-  margin-top:20px;
+  /* margin-top:20px; */
+}
+
+div.rdw-editor-main{
+    min-height: 700px;
 }
