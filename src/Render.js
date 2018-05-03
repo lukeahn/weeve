@@ -3,7 +3,6 @@ import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import {button, Grid, Row, Col} from 'react-bootstrap'; 
 import { convertToRaw } from 'draft-js';
-import draftToHtml from 'draftjs-to-html';
 
 // const rawContentState = convertToRaw(editorState.getCurrentContent());
 

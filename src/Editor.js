@@ -12,7 +12,7 @@ import update from 'react-addons-update'; // ES6
 
 //testing
 
-import draftToHtml from 'draftjs-to-html';
+
 
 class KnowledgeEditor extends Component {
 
