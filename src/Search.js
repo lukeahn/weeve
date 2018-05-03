@@ -10,9 +10,9 @@ class Search extends React.Component {
         super(props);
 
         this.state = {
-            //for retrieval 
+            //for retrieval
             posts:[
-                {"title": "title 1", "upvotes": 1, "collaborators": []}, 
+                {"title": "title 1", "upvotes": 1, "collaborators": []},
                 {"title": "title 2", "upvotes": 2, "collaborators": [1]}
             ],
             experts:[],
@@ -48,14 +48,20 @@ class Search extends React.Component {
     render() {
         return (
             <Grid>
-                <SearchQuery 
+                <SearchQuery
                     handleRequestData={this.handleRequestData}
                     handleAddCollaborator={this.handleAddCollaborator}
                     handleAddSuggestedTag={this.handleAddSuggestedTag}
                 />
-                <ResultCards results={this.state.posts} />
-                <Experts/>
-                <Tags/>
+              <Col xs={6} align="middle">
+                  <ResultCards results={this.state.posts} />
+              </Col>
+              <Row>
+                  <Experts/>
+              </Row>
+              <Row>
+                  <Tags/>
+              </Row>
             </Grid>
         );
     };
@@ -79,13 +85,13 @@ const SearchQuery = ({handleRequestData, handleAddCollaborator, handleAddSuggest
         </div>
     )
 }
-    
+
 const ResultCards = ({results}) => {
     const renderChildCard = result => (
         <Row>
-            <ResultCard 
-                title={result.title} 
-                upvotes={result.upvotes} 
+            <ResultCard
+                title={result.title}
+                upvotes={result.upvotes}
                 collaborators={result.collaborators}
             />
         </Row>
@@ -98,7 +104,7 @@ const ResultCard = ({title, upvotes, collaborators}) => {
     console.log(upvotes);
     console.log(collaborators);
     return (
-        <Col sm={6}>
+        <Col sm={12}>
             <div class="card">
                 <div class="card-content">
                     <span class="card-title">{title + Date.now().toString()}</span>
@@ -140,7 +146,7 @@ class Card extends React.Component {
           newArray.push({"name":e.target.value ,"pic":"./Pictures/user.png", "userId": "1"}); //hardcoded. need to remove.
           this.setState({users:newArray})
           console.log(this.state)
-          this.setState({form: ""}); 
+          this.setState({form: ""});
         }
     }
     _handleChange = event => {
@@ -148,12 +154,12 @@ class Card extends React.Component {
         [event.target.id]: event.target.value
         });
     }
-    
+
 
 
 render() {
     return (
-        <Col sm={6}>
+        <Col sm={12}>
             <div class="card">
                 <div class="card-content">
                     <span class="card-title">United Health Releases New Mobile Health App</span>
@@ -197,7 +203,7 @@ class ExpertUser extends React.Component{
             <a href="#"> <img src={require("./Pictures/message.png")} onClick={()=>toggleWidget()} height="42"  alt='Icon' /></a>
         </Col>
 
-        
+
     </Row>
   )}
 }
@@ -205,7 +211,7 @@ class ExpertUser extends React.Component{
 class Experts extends React.Component{
     render(){
         return(
-        <Col xsOffset={2} sm={4}>
+        <Col xsOffset={2} sm={10}>
             <div class="card">
                 <div class="card-content">
                     <span class="card-title">Experts</span>
@@ -236,7 +242,7 @@ class Experts extends React.Component{
 class Tags extends React.Component{
   render(){
   return(
-      <Col  xsOffset={2} sm={4} >
+      <Col  xsOffset={2} sm={10} >
         <div class="card">
           <div class="card-content">
             <span class="card-title">Filter your Tags</span>
