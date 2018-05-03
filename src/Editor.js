@@ -1,18 +1,21 @@
 import React, {Component} from 'react'
 import { Editor } from 'react-draft-wysiwyg';
-import { EditorState, Blocks, Data } from 'draft-js';
+import { EditorState, Blocks, Data,convertToRaw } from 'draft-js';
 import '../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { Grid, Row, Col, FormGroup, FormControl, ControlLabel} from 'react-bootstrap';
 import { RichUtils } from 'draft-js';
 import request from 'superagent';
 import { WithContext as ReactTags } from 'react-tag-input';
-import './Editor.css';
+import './static/css/Editor.css';
 import {Button, Icon, Chip, Input} from 'react-materialize'
 import update from 'react-addons-update'; // ES6
 
+//testing
+
+import draftToHtml from 'draftjs-to-html';
 
 
-const EditorComponent = () => <Editor />
+// const EditorComponent = () => <Editor />
 
 
 class KnowledgeEditor extends Component {
@@ -39,6 +42,7 @@ class KnowledgeEditor extends Component {
         else{
             data = null;
         }
+        this.onChange = (editorState) => this.setState({editorState});
         this.state = {
             data: data || Data,
             view: 'edit',
@@ -58,7 +62,8 @@ class KnowledgeEditor extends Component {
                 { id: 'Costa Rica', text: 'Costa Rica' },
                 { id: 'Sri Lanka', text: 'Sri Lanka' },
                 { id: 'Thailand', text: 'Thailand' }
-             ]
+             ],
+             editorState: EditorState.createEmpty()
 
         }
         this.handleDelete = this.handleDelete.bind(this);
@@ -95,8 +100,9 @@ class KnowledgeEditor extends Component {
           "collaborators": [1]
       })
 
-        })
-    }
+    })
+    
+}
     handleDeleteUsers(user) {
             const { users } = this.state;
             this.setState({
@@ -212,7 +218,10 @@ class KnowledgeEditor extends Component {
 
     render() {
         const {data, view, saved} = this.state;
-    //   const { editorState } = this.state;
+        const { editorState } = this.state;
+
+        // const rawContentState = convertToRaw(editorState.getCurrentContent());
+
         return (
             <Grid>
                 <div className="flex-container">

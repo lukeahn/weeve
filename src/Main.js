@@ -5,6 +5,7 @@ import Login from './Login'
 import Signup from './Signup'
 import Editor from './Editor'
 import Search from './Search'
+import Render from './Render'
 
 
 // The Main component renders one of the three provided
@@ -20,6 +21,7 @@ const Main = () => (
       <Route path='/signup' component={Signup}/>
       <Route path='/login' component={Login}/>
       <Route path='/editor' component={Editor}/>
+      <Route path='/render' component={Render}/>
     </Switch>
   </main>
 )

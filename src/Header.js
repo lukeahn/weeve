@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import { Link, Redirect,withRouter } from 'react-router-dom'
 import Slider from 'material-ui/Slider';
 import {Button, Grid, Row, Col,Nav, Navbar, NavItem, NavDropdown, MenuItem} from 'react-bootstrap'; 
-import logo from './weeve.png';
+import logo from './Pictures/weeve.png';
 
 
 

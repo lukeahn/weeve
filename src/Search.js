@@ -2,7 +2,7 @@ import React from 'react'
 import {Grid, Row, Col} from 'react-bootstrap';
 import { Widget, toggleWidget,profileAvatar} from 'react-chat-widget';
 import {Button, Icon, Chip, Input} from 'react-materialize'
-import "./index.css"
+import "./static/css/index.css"
 import 'react-chat-widget/lib/styles.css';
 class Card extends React.Component {
 

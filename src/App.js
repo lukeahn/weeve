@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './App.css';
+import './static/css/App.css';
 import '../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import Header from './Header';
 import Main from './Main';
