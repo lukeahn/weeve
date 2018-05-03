@@ -14,9 +14,6 @@ import update from 'react-addons-update'; // ES6
 
 import draftToHtml from 'draftjs-to-html';
 
-
-
-
 class KnowledgeEditor extends Component {
 
     constructor(props) {
@@ -50,9 +47,9 @@ class KnowledgeEditor extends Component {
             view: 'edit',
             saved: false,
             title: null,
-            users:[
-                    { name:"Zen Yui", pic:"./Pictures/zen.jpg", userId:"1"},
-                    { name:"Jill Sue", pic:"./Pictures/jill.png", userId:"2"}
+            users:[ 
+                    // { name:"Zen Yui", pic:"./Pictures/zen.jpg", userId:"1"},
+                    // { name:"Jill Sue", pic:"./Pictures/jill.png", userId:"2"}
                   ],
             collaborators:[],
             tags: [],
@@ -65,7 +62,6 @@ class KnowledgeEditor extends Component {
                 { id: 'Thailand', text: 'Thailand' }
              ],
              editorState: EditorState.createEmpty()
-
         }
         
         this.handleDelete = this.handleDelete.bind(this);
@@ -76,20 +72,23 @@ class KnowledgeEditor extends Component {
         this.addTags= this.addTags.bind(this);
     }
 
-
     save(){
         for (var x in this.state.users) {
             this.state.collaborators.push(this.state.users[x].userId)
-        }        
+        }
+
+
+        
         var TOKEN = localStorage.getItem("tokenID");
         localStorage.setItem("data", JSON.stringify(this.state.data));
         localStorage.setItem("hash", this.hash);
         var sendingData = {}
         sendingData["collaborators"]= this.state.collaborators
         sendingData["title"]=this.state.title
-        sendingData["explicit_tags"]= this.state.tags
+        // sendingData["explicit_tags"]= this.state.tags
+        sendingData["explicit_tags"] = this.state.tags.map((tag)=>{return tag["text"]})
         sendingData["body"]= JSON.stringify(this.state.data)
-
+        console.log(sendingData)
         fetch('http://localhost:8080/post/', {
             method: 'POST',
             headers: {
@@ -203,7 +202,7 @@ class KnowledgeEditor extends Component {
         if (e.key === 'Enter') {
           console.log(e.target.value)
           var newArray = this.state.users.slice();
-          newArray.push({"name":e.target.value ,"pic":"./Pictures/user.png", "userId": "3"}); //hardcoded. need to remove.
+          newArray.push({"name":e.target.value ,"pic":"./Pictures/user.png", "userId": "1"}); //hardcoded. need to remove.
           this.setState({users:newArray})
           console.log(this.state)
           this.setState({form: ""}); 
