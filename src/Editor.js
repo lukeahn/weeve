@@ -40,17 +40,13 @@ class KnowledgeEditor extends Component {
         }
 
         this.onChange = (editorState) => this.setState({editorState});
-       
-
+    
         this.state = {
             data: data || Data,
             view: 'edit',
             saved: false,
             title: null,
-            users:[ 
-                    // { name:"Zen Yui", pic:"./Pictures/zen.jpg", userId:"1"},
-                    // { name:"Jill Sue", pic:"./Pictures/jill.png", userId:"2"}
-                  ],
+            users:[],
             collaborators:[],
             tags: [],
             suggestions: [
@@ -77,8 +73,6 @@ class KnowledgeEditor extends Component {
             this.state.collaborators.push(this.state.users[x].userId)
         }
 
-
-        
         var TOKEN = localStorage.getItem("tokenID");
         localStorage.setItem("data", JSON.stringify(this.state.data));
         localStorage.setItem("hash", this.hash);
