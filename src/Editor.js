@@ -7,12 +7,8 @@ import { RichUtils } from 'draft-js';
 import request from 'superagent';
 import { WithContext as ReactTags } from 'react-tag-input';
 import './static/css/Editor.css';
-import {Button, Icon, Chip, Input} from 'react-materialize'
+import {Button, Icon, Chip, Input, Autocomplete} from 'react-materialize'
 import update from 'react-addons-update'; // ES6
-
-//testing
-
-
 
 class KnowledgeEditor extends Component {
 
@@ -47,6 +43,8 @@ class KnowledgeEditor extends Component {
             saved: false,
             title: null,
             users:[],
+            possibleUsers:{},
+            possibleUsersFullDetail: {},
             collaborators:[],
             tags: [],
             suggestions: [
@@ -66,6 +64,10 @@ class KnowledgeEditor extends Component {
         this.handleDrag = this.handleDrag.bind(this);
         this.renderUser= this.renderUser.bind(this);
         this.addTags= this.addTags.bind(this);
+    }
+
+    componentDidMount = () => {
+        this.getUserList();
     }
 
     save(){
@@ -194,12 +196,11 @@ class KnowledgeEditor extends Component {
     }
     _handleKeyPress = (e) => {
         if (e.key === 'Enter') {
-          console.log(e.target.value)
           var newArray = this.state.users.slice();
+
           newArray.push({"name":e.target.value ,"pic":"./Pictures/user.png", "userId": "1"}); //hardcoded. need to remove.
           this.setState({users:newArray})
-          console.log(this.state)
-          this.setState({form: ""}); 
+          e.target.value = "";
         }
     }
     _handleChange = event => {
@@ -207,12 +208,34 @@ class KnowledgeEditor extends Component {
         [event.target.id]: event.target.value
         });
     }
-    
+
+    getUserList = event => {
+        var TOKEN = localStorage.getItem("tokenID");
+        
+        fetch('http://localhost:8080/user/', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': "bearer " + TOKEN,
+        },
+        body: JSON.stringify()
+        }).then(dataWrappedByPromise => dataWrappedByPromise.json())
+        .then(data => {
+                        var temp = {};
+            for (var i = 0; i < data['users'].length; i++) {
+            temp[data['users'][i]['username']] =null;
+            this.setState({possibleUsers: temp});
+            this.setState({possibleUsersFullDetail:data})
+            console.log("loaded users")
+}   
+        })
+    }   
+
     
     render() {
         const {data, view, saved} = this.state;
         const { editorState } = this.state;
-
+        const { users } = this.state.possibleUsers;
         return (
             <Grid>
                 <div className="flex-container">
@@ -222,13 +245,14 @@ class KnowledgeEditor extends Component {
                         <Input id="title" type="search" label="What is the title?" s={12} onChange={this._handleChange} />
                     </Row>
                     <Row>
-                        <Col s={12} className ="sideUser">
-                            <Input  onKeyDown={this._handleKeyPress}
-                                    value={this.state.form}
-                                    s={6}
-                                    label="Add User"
-                            />
-                        </Col>
+                        <Autocomplete
+                            onKeyDown={this._handleKeyPress}
+                            title='Add Collaborator'
+                            data={
+                                this.state.possibleUsers 
+                            }
+                            value=""
+                        />
                     </Row>
                     <Row>
                       {this.renderUser()}
@@ -241,7 +265,6 @@ class KnowledgeEditor extends Component {
                             <div className="TeXEditor-editor">
                                 <Editor 
                                         disabledToolbar={true}
-
                                         onChange={data=>this.setState({data})}
                                         value={data}
                                         blockTypes={Blocks}

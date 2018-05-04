@@ -40,15 +40,7 @@ class Signup extends Component {
             username: this.state.email,
             password: this.state.password,
         })
-        }).then(dataWrappedByPromise => dataWrappedByPromise.json())
-        .then(tokenID => {
-        // you can access your data here
-            console.log(tokenID["token"])
-        // save it to the local storage
-            localStorage.setItem("tokenID", tokenID["token"]);
-        // console.log(response.status);
-        // console.log(response.json())
-        })
+        }).then(console.log("success"))
     }   
 
 render() {
