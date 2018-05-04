@@ -83,17 +83,6 @@ class Header extends Component {
                             <NavEditor />
                         </NavItem>
                     </Nav>
-                    <Nav>
-                        <NavItem >
-                            TBD
-                        </NavItem>
-                    </Nav>
-                    <Nav>
-                        <NavItem >
-                            TBD
-                        </NavItem>
-                    </Nav>
-
                     <Nav pullRight>
                         <NavItem >
                             <NavProfile />
