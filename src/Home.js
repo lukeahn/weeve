@@ -1,7 +1,7 @@
 import React from 'react'
 import {Grid, Row, Col, FormGroup, FormControl, ControlLabel} from 'react-bootstrap';
 import {Button, Icon, Chip, Input} from 'react-materialize'
-var URL="http://weeve-api.cornell.tech"
+var URL="http://weeve.cornell.tech"
 const Home = () => (
     <Grid>
         <h1>Welcome to Weeve</h1>
