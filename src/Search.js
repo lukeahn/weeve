@@ -4,7 +4,9 @@ import { Widget, toggleWidget,profileAvatar} from 'react-chat-widget';
 import {Button, Icon, Chip, Input} from 'react-materialize'
 import "./static/css/Index.css"
 import 'react-chat-widget/lib/styles.css';
+import axios from 'axios'
 
+URL="http://localhost:8080"
 class Search extends React.Component {
     constructor(props) {
         super(props);
@@ -12,27 +14,60 @@ class Search extends React.Component {
         this.state = {
             //for retrieval
             posts:[
-                {"title": "title 1", "upvotes": 1, "collaborators": []},
-                {"title": "title 2", "upvotes": 2, "collaborators": [1]}
             ],
             experts:[],
             tags:[],
             //for searching
-            searchKeywords: [],
+            searchKeywords: "",
             searchCollaborators: [],
+            collaborator:0
         };
 
+    }
+
+    handleUpdateKeywords = (keywords) => {
+      this.setState({searchKeywords: keywords})
+    }
+    handleUpdateWriter=(user) =>{
+      this.setState({collaborator:user})
     }
 
     handleRequestData = () => {
     //call the 3 APIs to get the list of posts, experts, suggested tags
         console.log('request data');
+        console.log(this.state.collaborator)
+        axios.post(URL+'/search/post/', {
+            "collaborators": [this.state.collaborator],
+            "keywords": this.state.searchKeywords
+          },
+            {"headers":
+              {
+                "Authorization": "bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3QudXNlckBlbWFpbC5jb20iLCJpYXQiOjE1MjUzOTQ2NzcsImV4cCI6MTUyNTQ4MTA3N30.szuJW4M-J7gZvyrFTR94S_QX8JAtsO0g1IrOSHw5U30",
+                "Content-Type":"application/json"
+              }
+            },
+          )
+          .then( (newPost )=> {
 
-        var newPost = {"title": "title 2", "upvotes": 2, "collaborators": [1]}
+            if(newPost["data"]["posts"].length!=0){
+                this.setState({
+                    posts: [...newPost["data"]["posts"]],
+                    experts:[...newPost["data"]["experts"]]
+                })
+                console.log(newPost["data"]["posts"])
+              }
+            else{
+              console.log("Null Object")
+            }
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
 
-        this.setState({
-            posts: [...this.state.posts, newPost]
-        })
+        var newPost = {"title": "title 2", "upvotes": 2, "collaborators": [1],
+                       "title": "title 42", "upvotes": 42, "collaborators": [1]}
+
+
     }
 
     handleAddCollaborator = (collborator) => {
@@ -52,12 +87,14 @@ class Search extends React.Component {
                     handleRequestData={this.handleRequestData}
                     handleAddCollaborator={this.handleAddCollaborator}
                     handleAddSuggestedTag={this.handleAddSuggestedTag}
+                    handleUpdateKeywords={this.handleUpdateKeywords}
+                    handleUpdateWriter={this.handleUpdateWriter}
                 />
-              <Col xs={6} align="middle">
+              <Col xs={6}>
                   <ResultCards results={this.state.posts} />
               </Col>
               <Row>
-                  <Experts/>
+                  <ResultExperts results={this.state.experts}/>
               </Row>
               <Row>
                   <Tags/>
@@ -69,181 +106,171 @@ class Search extends React.Component {
 
 }
 
-const SearchQuery = ({handleRequestData, handleAddCollaborator, handleAddSuggestedTag}) => {
+const SearchQuery = ({handleRequestData, handleAddCollaborator, handleAddSuggestedTag, handleUpdateKeywords,handleUpdateWriter}) => {
 
     return (
         <div>
             <Row>
-                <Input type="search" label="What Are you looking for?" s={12} />
+              <Col xs={5}>
+                <Input type="search" onChange={event=>{handleUpdateKeywords(event.target.value)}} label="What Are you looking for?"/>
+              </Col>
+              <Col xs={2} className="search-margin">
+                  <Button waves="light"  onClick={handleRequestData}>Search</Button>
+              </Col>
+              <Col xs={5}>
+                <Input type="search" onChange={event=>{handleUpdateWriter(event.target.value)}} label="Who wrote the post?" s={12} />
+              </Col>
             </Row>
-            <Row>
-                <Input type="search" label="Who wrote the post?" s={12} />
-            </Row>
-            <Row>
-                <Button waves="light" onClick={handleRequestData}>Search</Button>
-            </Row>
+
         </div>
     )
 }
 
 const ResultCards = ({results}) => {
     const renderChildCard = result => (
-        <Row>
             <ResultCard
                 title={result.title}
                 upvotes={result.upvotes}
                 collaborators={result.collaborators}
+                explicit_tags={result.explicit_tags}
             />
-        </Row>
     )
-    return (<div>{results.map(renderChildCard)}</div>);
+    if (results.length==0){
+      return (<div><Error/></div>)
+    }else{
+      return (<div>{results.map(renderChildCard)}</div>);
+    }
 };
 
-const ResultCard = ({title, upvotes, collaborators}) => {
-    console.log(title);
-    console.log(upvotes);
-    console.log(collaborators);
+const Error = () => {
+
+
     return (
-        <Col sm={12}>
-            <div class="card">
-                <div class="card-content">
-                    <span class="card-title">{title + Date.now().toString()}</span>
-                    <a href="#">#Mobile Health</a>
-                </div>
-                <div class="card-action">
-                    <Row>
-                        <Col xsOffset={1} xs={2} align="middle">
-                            <a href="#"><img src={require("./Pictures/jill.png")} height="42"  alt='Icon' /></a>
+        <div>
+            <Row>
+            </Row>
+            <Row>
+            </Row>
+          <Col sm={11}>
+              <div class="card">
+                  <div class="card-content">
+                      <Col sm={9} class="card-title">
+                        <p>Your search  - did not match any documents. </p>
+                        <p>Suggestions:
+                          Try different keywords.</p>
+                      </Col>
+                        <Col  xsOffset={1} xs={2} align="middle">
+                          <a href="#"> <img src={require("./Pictures/lens.png")} onClick={()=>toggleWidget()} height="60"  alt='Icon' /></a>
                         </Col>
-                        <Col xs={1} align="middle">
-                            <a href="#"> <img src={require("./Pictures/message.png")} onClick={()=>toggleWidget()} height="42"  alt='Icon' /></a>
-                        </Col>
-                        <Col xsOffset={2} xs={1} align="middle">
-                        {/* <img src={require("./Pictures/star.png")} align="right" height="42" onClick={()=>this.setState({like: this.state.like+1})} alt='Icon'></img> */}
-                        </Col>
-                        <Col xs={2} align="left">
-                            {/* <h3>{this.state.like}</h3> */}
-                        </Col>
-                    </Row>
-                </div>
-            </div>
-        </Col>
+                  </div>
+                  <div class="card-action">
+                      <Row>
+                          <Col xsOffset={1} xs={3} align="middle">
+                          </Col>
+                          <Col xs={1} align="middle">
+                          </Col>
+                      </Row>
+                  </div>
+              </div>
+          </Col>
+        </div>
     );
 };
 
-class Card extends React.Component {
+const ResultCard = ({title, upvotes, collaborators, explicit_tags}) => {
 
-    handleClick = event => {
-        this.setState({
-        [event.target.id]: event.target.value
-        });
-    }
-
-    _handleKeyPress = (e) => {
-        if (e.key === 'Enter') {
-          console.log(e.target.value)
-          var newArray = this.state.users.slice();
-          newArray.push({"name":e.target.value ,"pic":"./Pictures/user.png", "userId": "1"}); //hardcoded. need to remove.
-          this.setState({users:newArray})
-          console.log(this.state)
-          this.setState({form: ""});
-        }
-    }
-    _handleChange = event => {
-        this.setState({
-        [event.target.id]: event.target.value
-        });
-    }
+    const addTag = (tag)=>{
+      return   <span className="tag-margin"><a href="#">#{tag}</a></span>
+    };
 
 
-
-render() {
     return (
-        <Col sm={12}>
-            <div class="card">
-                <div class="card-content">
-                    <span class="card-title">United Health Releases New Mobile Health App</span>
-                    <p>I am a very simple card. I am good at containing small bits of information.
-                    I am convenient because I require little markup to use effectively.</p>
-                    <p><a href="#"> </a> <a href="#">#Mobile Health</a></p>
-                </div>
-                <div class="card-action">
-                    <Row>
-                        <Col xsOffset={1} xs={2} align="middle">
-                            <a href="#"><img src={require("./Pictures/jill.png")} height="42"  alt='Icon' /></a>
+        <div>
+          <Col sm={1} align="center" className="margin-top-small">
+            <Row>
+               <img src={require("./Pictures/star.png")} align="middle" height="24" onClick={()=>upvotes=upvotes+1} alt='Icon'></img>
+            </Row>
+            <Row>
+                  <h6>{upvotes}</h6>
+            </Row>
+          </Col>
+          <Col sm={11}>
+              <div class="card">
+                  <div class="card-content">
+                      <Col sm={9} class="card-title">
+                        {title}
+                      </Col>
+                        <Col  xsOffset={1} xs={2} align="middle">
+                            <a href="#"> <img src={require("./Pictures/bookmark.png")} onClick={()=>toggleWidget()} height="30"  alt='Icon' /></a>
                         </Col>
-                        <Col xs={1} align="middle">
-                            <a href="#"> <img src={require("./Pictures/message.png")} onClick={()=>toggleWidget()} height="42"  alt='Icon' /></a>
-                        </Col>
-                        <Col xsOffset={2} xs={1} align="middle">
-                        <img src={require("./Pictures/star.png")} align="right" height="42" onClick={()=>this.setState({like: this.state.like+1})} alt='Icon'></img>
-                        </Col>
-                        <Col xs={2} align="left">
-                            <h3>{this.state.like}</h3>
-                        </Col>
-                    </Row>
-                </div>
-            </div>
-        </Col>
+                  </div>
+                  <div class="card-action">
+                      <Row>
+                          {explicit_tags.map(addTag)}
+                          <Col xsOffset={1} xs={3} align="middle">
+                              <a href="#"><img src={require("./Pictures/jill.png")} height="30"  alt='Icon' /></a>
+                          </Col>
+                          <Col xs={1} align="middle">
+                              <a href="mailto:zenyui@cornell.edu"> <img src={require("./Pictures/message.png")} onClick={()=>toggleWidget()} height="30"  alt='Icon' /></a>
+                          </Col>
+
+
+                      </Row>
+                  </div>
+              </div>
+          </Col>
+        </div>
     );
-}
-}
-class ExpertUser extends React.Component{
-    render(){
-        return(
-    <Row>
-        <Col xsOffset={1} xs={2} align="middle">
-            <a href="#"><img src={require("./Pictures/zen.jpg")} height="42"  alt='Icon' /></a>
-        </Col>
-        <Col xs={6} align="middle">
-            <p><h6>Zen Yui</h6></p>
-            <p>Data Engineer</p>
-        </Col>
-            <Col xsOffset={0} xs={1} align="middle">
-            <a href="#"> <img src={require("./Pictures/message.png")} onClick={()=>toggleWidget()} height="42"  alt='Icon' /></a>
-        </Col>
+};
 
 
-    </Row>
-  )}
-}
-
-class Experts extends React.Component{
-    render(){
-        return(
-        <Col xsOffset={2} sm={10}>
-            <div class="card">
-                <div class="card-content">
-                    <span class="card-title">Experts</span>
-                </div>
-                <div class="card-action margin-bottom-neg">
-                    <ExpertUser/>
-                </div>
-                <div class="card-action">
-                    <Row>
-                        <Col xsOffset={1} xs={2} align="middle">
-                            <a href="#"><img src={require("./Pictures/user.png")} height="42"  alt='Icon' /></a>
-                        </Col>
-                        <Col xs={6} align="middle">
-                            <p>Luke Ahn</p>
-                            <p>Software Engineer</p>
-                        </Col>
-                        <Col xsOffset={0} xs={1} align="middle">
-                            <a href="#"> <img src={require("./Pictures/message.png")} onClick={()=>toggleWidget()} height="42"  alt='Icon' /></a>
-                        </Col>
-                    </Row>
-                </div>
-            </div>
-      </Col>
+const ResultExperts= ({results}) => {
+    const renderChildExpert=result => (
+      <ExpertUser
+          display_name={result.display_name}
+          picture={result.picture}
+          post_count={result.post_count}
+          user_id={result.user_id}
+          username={result.username}
+      />
     )
-  }
+      return(
+          <Col xsOffset={2} sm={10}>
+              <div class="card">
+                  <div class="card-content">
+                      <span class="card-title">Experts</span>
+                  </div>
+                  <div class="card-action margin-bottom-neg">
+                      {results.map(renderChildExpert)}
+                  </div>
+              </div>
+        </Col>
+    )
 }
+
+
+const ExpertUser = ({display_name, picture, post_count, user_id,username}) => {
+    return(
+      <Row>
+          <Col xsOffset={1} xs={2} align="middle">
+              <a href="#"><img src={require("./Pictures/zen.jpg")} height="30"  alt='Icon' /></a>
+          </Col>
+          <Col xs={6} align="left">
+              <h6>{display_name}</h6>
+          </Col>
+              <Col xsOffset={0} xs={1} align="middle">
+              <a href="mailto:zenyui@cornell.edu"> <img src={require("./Pictures/message.png")} onClick={()=>toggleWidget()} height="30"  alt='Icon' /></a>
+          </Col>
+      </Row>
+  )
+}
+
 
 class Tags extends React.Component{
   render(){
   return(
       <Col  xsOffset={2} sm={10} >
-        <div class="card">
+        <div class="card tags">
           <div class="card-content">
             <span class="card-title">Filter your Tags</span>
           </div>
