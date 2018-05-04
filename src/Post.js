@@ -10,26 +10,27 @@ import './static/css/Editor.css';
 import {Button, Icon, Chip, Input, Autocomplete} from 'react-materialize'
 import update from 'react-addons-update'; // ES6
 
+var URL="http://weeve-api.cornell.tech"
 
 
 class Post extends Component {
-    
+
     constructor(props) {
-        
+
         super(props);
         this.state = {
             editorState: EditorState.createEmpty()
         };
 
     }
-    
+
     componentDidMount = () => {
         this.getPost();
     }
 
     getPost = event => {
         var TOKEN = localStorage.getItem("tokenID");
-        var url = 'http://localhost:8080/post/' + this.props.match.params.postid;
+        var url = URL+'/post/' + this.props.match.params.postid;
         fetch(url, {
             method: 'GET',
             headers: {
@@ -59,7 +60,7 @@ class Post extends Component {
 
 render() {
     const { isLoaded, editorTitle } = this.state;
-    
+
     if (isLoaded) {
         return (
             <Grid>
@@ -69,7 +70,7 @@ render() {
                     </div>
                 </Row>
                 <Row>
-                <Editor 
+                <Editor
                     editorState={this.state.editorState}
                     onEditorStateChange={this.onEditorStateChange}
                     readOnly={true}
@@ -85,5 +86,3 @@ render() {
 }
 
 export default Post
-
-
