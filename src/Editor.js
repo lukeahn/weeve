@@ -35,7 +35,7 @@ class KnowledgeEditor extends Component {
             data = null;
         }
 
-       
+
         this.state = {
             data: data || Data,
             view: 'edit',
@@ -81,9 +81,9 @@ class KnowledgeEditor extends Component {
         }
 
         console.log("ES",this.state.editorState)
-        
+
         const contentState= this.state.editorState.getCurrentContent();
-        
+
         var TOKEN = localStorage.getItem("tokenID");
         localStorage.setItem("data", JSON.stringify(this.state.data));
         localStorage.setItem("hash", this.hash);
@@ -94,7 +94,7 @@ class KnowledgeEditor extends Component {
         sendingData["explicit_tags"] = this.state.tags.map((tag)=>{return tag["text"]})
         sendingData["body"]= JSON.stringify(convertToRaw(contentState))
         console.log(sendingData)
-        fetch('http://localhost:8080/post/', {
+        fetch(URL+'/post/', {
             method: 'POST',
             headers: {
                 "Content-Type": 'application/json',
@@ -223,7 +223,7 @@ class KnowledgeEditor extends Component {
     //                 this.state.possibleUsersFullDetail[i]['picture'] ="./Pictures/user.png"
     //                 userInfo = this.state.possibleUsersFullDetail[i]
     //             }
-            
+
     //         }
     //       newArray.push(userInfo); //hardcoded. need to remove.
     //       this.setState({users:newArray})
@@ -238,7 +238,7 @@ class KnowledgeEditor extends Component {
 
     getUserList = event => {
         var TOKEN = localStorage.getItem("tokenID");
-        
+
         fetch('http://localhost:8080/user/', {
         method: 'GET',
         headers: {
@@ -249,20 +249,20 @@ class KnowledgeEditor extends Component {
         }).then(dataWrappedByPromise => dataWrappedByPromise.json())
         .then(data => {
         var temp = {};
-        
+
         for (var i = 0; i < data['users'].length; i++) {
             temp[data['users'][i]['username']] =null;
             this.setState({possibleUsers: temp});
             this.setState({possibleUsersFullDetail:data})
-        
-        
+
+
         }
-        console.log("user list", data)   
+        console.log("user list", data)
         })
     }
     onEditorStateChange = (editorState) => {
         const contentState= editorState.getCurrentContent();
-        
+
         this.saveContent(contentState)
         this.setState({
           editorState,
@@ -272,18 +272,18 @@ class KnowledgeEditor extends Component {
     saveContent = (content) => {
     window.localStorage.setItem('content', JSON.stringify(convertToRaw(content)));
     }
-    
+
     render() {
         const {data, view, saved} = this.state;
         const { editorState } = this.state;
         const { users } = this.state.possibleUsers;
 
-        
+
         return (
             <Grid>
                 <div className="flex-container">
                     {this.renderSide()}
-                    
+
                     <Row>
                         <Input id="title" type="search" label="What is the title?" s={12} onChange={this._handleChange} />
                     </Row>
@@ -292,7 +292,7 @@ class KnowledgeEditor extends Component {
                             onKeyDown={this._handleKeyPress}
                             title='Add Collaborator'
                             data={
-                                this.state.possibleUsers 
+                                this.state.possibleUsers
                             }
                             value=""
                         />
@@ -306,10 +306,10 @@ class KnowledgeEditor extends Component {
                     <div className="container-content" style={{display: view!=='json' ? 'block' : 'none'}}>
                         <div className="TeXEditor-root">
                             <div className="TeXEditor-editor">
-                                <Editor 
+                                <Editor
                                         editorState={this.state.editorState}
                                         onEditorStateChange={this.onEditorStateChange}
-                                        
+
                                         />
                             </div>
                         </div>

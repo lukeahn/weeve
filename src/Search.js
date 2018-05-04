@@ -7,7 +7,7 @@ import 'react-chat-widget/lib/styles.css';
 import axios from 'axios'
 var TOKEN = localStorage.getItem("tokenID");
 
-var URL="http://localhost:8080"
+var URL="http://weeve-api.cornell.tech"
 var config = {
   "headers":
     {

@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import {button, Grid, Row, Col} from 'react-bootstrap';
-var localURL="http://localhost:3000"
+import { Link, withRouter } from "react-router-dom";
+
+var URL="http://weeve-api.cornell.tech"
 
 const style = {
 margin: 12,
@@ -30,7 +32,7 @@ class Signup extends Component {
     handleSignup = event => {
         // event.preventDefault();
 
-        fetch('http://localhost:8080/auth/signup', {
+        fetch(URL+'/auth/signup', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -40,7 +42,7 @@ class Signup extends Component {
             username: this.state.email,
             password: this.state.password,
         })
-      }).then(window.location.replace(localURL+"/"));
+      }).then(this.props.history.push("/login"));
     }
 
 render() {

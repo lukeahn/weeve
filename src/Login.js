@@ -2,10 +2,7 @@ import React, { Component } from 'react';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import {button, Grid, Row, Col} from 'react-bootstrap';
-
-var localURL="http://localhost:3000"
-
-
+var URL="http://weeve-api.cornell.tech"
 const style = {
     margin: 12,
   };
@@ -32,7 +29,7 @@ class Login extends Component {
     handleLogin = event => {
         // event.preventDefault();
 
-        fetch('http://localhost:8080/auth/login', {
+        fetch(URL+'/auth/login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -47,7 +44,7 @@ class Login extends Component {
         .then(tokenID => {
             console.log(tokenID["token"])
             localStorage.setItem("tokenID", tokenID["token"]);
-            window.location.replace(localURL+"/editor");
+            this.props.history.push("/editor");
         })
     }
 
