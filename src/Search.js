@@ -19,11 +19,7 @@ class Search extends React.Component {
 
     constructor(props) {
         super(props);
-        axios.get(URL+"/user/",config)
-          .then(function(response){
-            console.log(response.data); // ex.: { user: 'Your User'}
-            console.log(response.status); // ex.: 200
-          });
+
         this.state = {
             //for retrieval
             posts:[
@@ -33,10 +29,23 @@ class Search extends React.Component {
             //for searching
             searchKeywords: "",
             searchCollaborators: [],
-            collaborator:9
+            collaborator:9,
+            suggested_users:[]
         };
+      }
 
-    }
+        componentDidMount = (event) => {
+          axios.get(URL+"/user/",config)
+            .then((response)=>{
+              console.log("Success")
+              console.log(response.data); // ex.: { user: 'Your User'}
+              console.log(response.status);
+              this.setState({
+                  suggested_users: [...response["display_name"]],
+              })
+            });
+        }
+
 
     handleUpdateKeywords = (keywords) => {
       this.setState({searchKeywords: keywords})
@@ -49,7 +58,7 @@ class Search extends React.Component {
     //call the 3 APIs to get the list of posts, experts, suggested tags
         console.log('request data');
         var TOKEN = localStorage.getItem("tokenID");
-        console.log(TOKEN)
+        console.log(this.state)
         axios.post(URL+'/search/post/', {
             "collaborators": [this.state.collaborator],
             "keywords": this.state.searchKeywords
