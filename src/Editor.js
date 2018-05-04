@@ -241,7 +241,7 @@ class KnowledgeEditor extends Component {
     getUserList = event => {
         var TOKEN = localStorage.getItem("tokenID");
 
-        fetch('http://localhost:8080/user/', {
+        fetch(URL+'/user/', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
