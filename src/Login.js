@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
-import {button, Grid, Row, Col} from 'react-bootstrap'; 
+import {button, Grid, Row, Col} from 'react-bootstrap';
+
+var localURL="http://localhost:3000"
 
 
 const style = {
@@ -9,9 +11,9 @@ const style = {
   };
 
 class Login extends Component {
-    
+
     constructor(props) {
-        
+
         super(props);
 
         this.state = {
@@ -29,7 +31,7 @@ class Login extends Component {
 
     handleLogin = event => {
         // event.preventDefault();
-        
+
         fetch('http://localhost:8080/auth/login', {
         method: 'POST',
         headers: {
@@ -45,8 +47,9 @@ class Login extends Component {
         .then(tokenID => {
             console.log(tokenID["token"])
             localStorage.setItem("tokenID", tokenID["token"]);
+            window.location.replace(localURL+"/editor");
         })
-    }   
+    }
 
 render() {
     const { email, password } = this.state;

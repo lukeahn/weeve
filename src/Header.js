@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import { Link, Redirect,withRouter } from 'react-router-dom'
 import Slider from 'material-ui/Slider';
-import {Button, Grid, Row, Col,Nav, Navbar, NavItem, NavDropdown, MenuItem} from 'react-bootstrap'; 
+import {Button, Grid, Row, Col,Nav, Navbar, NavItem, NavDropdown, MenuItem} from 'react-bootstrap';
 import logo from './Pictures/weeve.png';
 
 
@@ -40,9 +40,9 @@ const NavProfile = withRouter(({ history }) => (
 
 
 class Header extends Component {
-  
+
     constructor(props) {
-    
+
         super(props);
         this.state = {
             component: null,
@@ -50,21 +50,21 @@ class Header extends Component {
         };
     }
 
-   
-    
+
+
     handleSelect(eventKey) {
     alert(`selected ${eventKey}`);
     }
-    
+
 
     render() {
         if (this.state.login === true) {
             return <Redirect push to='/login' />
           }
-        else 
-      
+        else
+
         return (
-            
+
             <Navbar inverse collapseOnSelect>
 
                 <Navbar.Collapse>
@@ -96,19 +96,7 @@ class Header extends Component {
 
                     <Nav pullRight>
                         <NavItem >
-                            <NavProfile /> 
-                        </NavItem>
-                    </Nav>
-
-                    <Nav pullRight>
-                        <NavItem >
-                            <NavLogin />
-                        </NavItem>
-                    </Nav>
-
-                    <Nav pullRight>
-                        <NavItem >
-                            <NavSignup />
+                            <NavProfile />
                         </NavItem>
                     </Nav>
                 </Navbar.Collapse>

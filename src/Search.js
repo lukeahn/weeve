@@ -1,16 +1,29 @@
 import React from 'react'
 import {Grid, Row, Col} from 'react-bootstrap';
 import { Widget, toggleWidget,profileAvatar} from 'react-chat-widget';
-import {Button, Icon, Chip, Input} from 'react-materialize'
+import {Autocomplete,Button, Icon, Chip, Input} from 'react-materialize'
 import "./static/css/Index.css"
 import 'react-chat-widget/lib/styles.css';
 import axios from 'axios'
+var TOKEN = localStorage.getItem("tokenID");
 
-URL="http://localhost:8080"
+var URL="http://localhost:8080"
+var config = {
+  "headers":
+    {
+      "Authorization": "bearer " + TOKEN,
+      "Content-Type":"application/json"
+    }
+  };
 class Search extends React.Component {
+
     constructor(props) {
         super(props);
-
+        axios.get(URL+"/user/",config)
+          .then(function(response){
+            console.log(response.data); // ex.: { user: 'Your User'}
+            console.log(response.status); // ex.: 200
+          });
         this.state = {
             //for retrieval
             posts:[
@@ -20,7 +33,7 @@ class Search extends React.Component {
             //for searching
             searchKeywords: "",
             searchCollaborators: [],
-            collaborator:0
+            collaborator:9
         };
 
     }
@@ -35,14 +48,15 @@ class Search extends React.Component {
     handleRequestData = () => {
     //call the 3 APIs to get the list of posts, experts, suggested tags
         console.log('request data');
-        console.log(this.state.collaborator)
+        var TOKEN = localStorage.getItem("tokenID");
+        console.log(TOKEN)
         axios.post(URL+'/search/post/', {
             "collaborators": [this.state.collaborator],
             "keywords": this.state.searchKeywords
           },
             {"headers":
               {
-                "Authorization": "bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InRlc3QudXNlckBlbWFpbC5jb20iLCJpYXQiOjE1MjUzOTQ2NzcsImV4cCI6MTUyNTQ4MTA3N30.szuJW4M-J7gZvyrFTR94S_QX8JAtsO0g1IrOSHw5U30",
+                "Authorization": "bearer " + TOKEN,
                 "Content-Type":"application/json"
               }
             },
@@ -58,6 +72,10 @@ class Search extends React.Component {
               }
             else{
               console.log("Null Object")
+              this.setState({
+                  posts: [],
+                  experts:[]
+              })
             }
           })
           .catch(function (error) {
@@ -118,7 +136,15 @@ const SearchQuery = ({handleRequestData, handleAddCollaborator, handleAddSuggest
                   <Button waves="light"  onClick={handleRequestData}>Search</Button>
               </Col>
               <Col xs={5}>
-                <Input type="search" onChange={event=>{handleUpdateWriter(event.target.value)}} label="Who wrote the post?" s={12} />
+                <Autocomplete  data={
+                  {
+                    "user1": 'https://cdn3.iconfinder.com/data/icons/business-round-flat-vol-1-1/36/user_account_profile_avatar_person_student_female-256.png',
+                    "user2":'https://cdn3.iconfinder.com/data/icons/business-round-flat-vol-1-1/36/user_account_profile_avatar_person_student_female-256.png',
+                    "user3":'https://cdn3.iconfinder.com/data/icons/business-round-flat-vol-1-1/36/user_account_profile_avatar_person_student_female-256.png',
+                    "user9":'https://cdn3.iconfinder.com/data/icons/business-round-flat-vol-1-1/36/user_account_profile_avatar_person_student_female-256.png'
+
+                  }}
+                  type="search" onChange={event=>{handleUpdateWriter(event.target.value)}} title="Who wrote the post?" s={12} />
               </Col>
             </Row>
 

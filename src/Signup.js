@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
-import {button, Grid, Row, Col} from 'react-bootstrap'; 
-
+import {button, Grid, Row, Col} from 'react-bootstrap';
+var localURL="http://localhost:3000"
 
 const style = {
 margin: 12,
   };
 
 class Signup extends Component {
-    
+
     constructor(props) {
-        
+
         super(props);
 
         this.state = {
@@ -29,7 +29,7 @@ class Signup extends Component {
 
     handleSignup = event => {
         // event.preventDefault();
-        
+
         fetch('http://localhost:8080/auth/signup', {
         method: 'POST',
         headers: {
@@ -40,8 +40,8 @@ class Signup extends Component {
             username: this.state.email,
             password: this.state.password,
         })
-        }).then(console.log("success"))
-    }   
+      }).then(window.location.replace(localURL+"/"));
+    }
 
 render() {
     const { email, password } = this.state;
