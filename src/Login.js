@@ -57,7 +57,7 @@ render() {
     return (
         <div style={{textAlign: 'center'}} >
             <TextField id="email" hintText="ID" value={this.state.email} onChange={this.handleChange}/><br />
-            <TextField id="password" hintText="Password" value={this.state.password} onChange={this.handleChange}/><br />
+            <TextField id="password" type="password" hintText="Password" value={this.state.password} onChange={this.handleChange}/><br />
             <RaisedButton label="Log In" style={style} disabled={!enabled} onClick={()=>{this.handleLogin() }}/>
         </div>
     );
