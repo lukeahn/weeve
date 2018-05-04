@@ -40,15 +40,7 @@ class Signup extends Component {
             username: this.state.email,
             password: this.state.password,
         })
-        }).then(dataWrappedByPromise => dataWrappedByPromise.json())
-        .then(tokenID => {
-        // you can access your data here
-            console.log(tokenID["token"])
-        // save it to the local storage
-            localStorage.setItem("tokenID", tokenID["token"]);
-        // console.log(response.status);
-        // console.log(response.json())
-        })
+        }).then(console.log("success"))
     }   
 
 render() {
@@ -60,7 +52,7 @@ render() {
     return (
         <div style={{textAlign: 'center'}} >
             <TextField id="email" hintText="ID" value={this.state.email} onChange={this.handleChange}/><br />
-            <TextField id="password" hintText="Password" value={this.state.password} onChange={this.handleChange}/><br />
+            <TextField id="password" type="password" hintText="Password" value={this.state.password} onChange={this.handleChange}/><br />
             <RaisedButton label="Sign Up" style={style} disabled={!enabled} onClick={()=>{this.handleSignup() }}/>
         </div>
     );
