@@ -7,12 +7,12 @@ const Home = () => (
         <h1>Welcome to Weeve</h1>
         <Row>
         <Col sm={12} align="center">
-          <a href="http://weeve-api.cornell.tech/login/"><Button waves='light'>Log In</Button></a>
+          <a href="http://weeve.cornell.tech/login/"><Button waves='light'>Log In</Button></a>
         </Col>
         </Row>
         <Row>
         <Col sm={12} align="center">
-          <a href="http://weeve-api.cornell.tech/signup/"><Button waves='light'>SignUp</Button></a>
+          <a href="http://weeve.cornell.tech/signup/"><Button waves='light'>SignUp</Button></a>
         </Col>
       </Row>
     </Grid>
