@@ -3,7 +3,6 @@ import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import {button, Grid, Row, Col} from 'react-bootstrap'; 
 import { convertToRaw } from 'draft-js';
-import Autosuggest from 'react-autosuggest';
 
 // Imagine you have a list of languages that you'd like to autosuggest.
 const languages = [
