@@ -8,6 +8,9 @@ import axios from 'axios'
 var TOKEN = localStorage.getItem("tokenID");
 
 var URL="http://weeve-api.cornell.tech"
+var dict={}
+var obj={}
+var jsonAutocomplete
 var config = {
   "headers":
     {
@@ -29,7 +32,7 @@ class Search extends React.Component {
             //for searching
             searchKeywords: "",
             searchCollaborators: [],
-            collaborator:9,
+            collaborator:[],
             suggested_users:[]
         };
       }
@@ -38,29 +41,48 @@ class Search extends React.Component {
           axios.get(URL+"/user/",config)
             .then((response)=>{
               console.log("Success")
-              console.log(response.data); // ex.: { user: 'Your User'}
+              console.log(response.data.users); // ex.: { user: 'Your User'}
               console.log(response.status);
               this.setState({
-                  suggested_users: [...response["display_name"]],
+                  suggested_users: [...response["data"]["users"]],
               })
+              var i;
+              for (i = 0; i < response.data.users.length; i++) {
+                  dict[response["data"]["users"][i].display_name]=response["data"]["users"][i].user_id
+                  obj[response["data"]["users"][i].display_name]="https://cdn3.iconfinder.com/data/icons/business-round-flat-vol-1-1/36/user_account_profile_avatar_person_student_female-256.png"
+              }
+              console.log(dict)
             });
         }
 
 
     handleUpdateKeywords = (keywords) => {
+
       this.setState({searchKeywords: keywords})
     }
     handleUpdateWriter=(user) =>{
-      this.setState({collaborator:user})
+      console.log("test")
+      console.log(user)
+      console.log(dict[user])
+      if(dict[user]==null){
+        this.setState({collaborator:[]})
+      }else{
+      this.setState({collaborator:[dict[user]]})
+      }
     }
 
     handleRequestData = () => {
     //call the 3 APIs to get the list of posts, experts, suggested tags
+      console.log(this.state.searchKeywords)
+        if(this.state.searchKeywords==""){
+          alert("Please Insert a word in Search ")
+          return
+        }
         console.log('request data');
         var TOKEN = localStorage.getItem("tokenID");
         console.log(this.state)
         axios.post(URL+'/search/post/', {
-            "collaborators": [this.state.collaborator],
+            "collaborators": this.state.collaborator,
             "keywords": this.state.searchKeywords
           },
             {"headers":
@@ -90,10 +112,6 @@ class Search extends React.Component {
           .catch(function (error) {
             console.log(error);
           });
-
-        var newPost = {"title": "title 2", "upvotes": 2, "collaborators": [1],
-                       "title": "title 42", "upvotes": 42, "collaborators": [1]}
-
 
     }
 
@@ -145,14 +163,7 @@ const SearchQuery = ({handleRequestData, handleAddCollaborator, handleAddSuggest
                   <Button waves="light"  onClick={handleRequestData}>Search</Button>
               </Col>
               <Col xs={5}>
-                <Autocomplete  data={
-                  {
-                    "user1": 'https://cdn3.iconfinder.com/data/icons/business-round-flat-vol-1-1/36/user_account_profile_avatar_person_student_female-256.png',
-                    "user2":'https://cdn3.iconfinder.com/data/icons/business-round-flat-vol-1-1/36/user_account_profile_avatar_person_student_female-256.png',
-                    "user3":'https://cdn3.iconfinder.com/data/icons/business-round-flat-vol-1-1/36/user_account_profile_avatar_person_student_female-256.png',
-                    "user9":'https://cdn3.iconfinder.com/data/icons/business-round-flat-vol-1-1/36/user_account_profile_avatar_person_student_female-256.png'
-
-                  }}
+                <Autocomplete  data={obj}
                   type="search" onChange={event=>{handleUpdateWriter(event.target.value)}} title="Who wrote the post?" s={12} />
               </Col>
             </Row>

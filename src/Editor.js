@@ -10,6 +10,8 @@ import './static/css/Editor.css';
 import {Button, Icon, Chip, Input, Autocomplete} from 'react-materialize'
 import update from 'react-addons-update'; // ES6
 
+var URL="http://weeve-api.cornell.tech"
+
 class KnowledgeEditor extends Component {
 
     constructor(props) {
