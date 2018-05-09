@@ -37,6 +37,12 @@ const NavProfile = withRouter(({ history }) => (
     </div>
 ))
 
+const NavAboutUs = withRouter(({ history }) => (
+    <div onClick={() => { history.push('/team') }}>
+        About Us
+    </div>
+))
+
 
 
 class Header extends Component {
@@ -81,6 +87,11 @@ class Header extends Component {
                     <Nav>
                         <NavItem >
                             <NavEditor />
+                        </NavItem>
+                    </Nav>
+                    <Nav>
+                        <NavItem >
+                            <NavAboutUs />
                         </NavItem>
                     </Nav>
                     <Nav pullRight>

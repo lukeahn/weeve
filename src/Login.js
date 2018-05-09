@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import {button, Grid, Row, Col} from 'react-bootstrap';
+import {Autocomplete,Button, Icon, Chip, Input} from 'react-materialize'
+
 var URL="http://weeve-api.cornell.tech"
 const style = {
     margin: 12,
@@ -55,11 +57,28 @@ render() {
           password.length > 0;
 
     return (
-        <div style={{textAlign: 'center'}} >
-            <TextField id="email" hintText="ID" value={this.state.email} onChange={this.handleChange}/><br />
-            <TextField id="password" type="password" hintText="Password" value={this.state.password} onChange={this.handleChange}/><br />
-            <RaisedButton label="Log In" style={style} disabled={!enabled} onClick={()=>{this.handleLogin() }}/>
-        </div>
+      <Grid>
+          <Row>
+             <Col  xsOffset={4} xs={4} className="title_font" >
+              <h2>Access your Weeve Account</h2>
+            </Col>
+          </Row>
+          <Row>
+            <Col  xsOffset={4} xs={4} className="title_font" >
+              <TextField id="email" hintText="ID" value={this.state.email} onChange={this.handleChange}/><br />
+            </Col>
+          </Row>
+          <Row>
+            <Col  xsOffset={4} xs={4} className="title_font" >
+              <TextField id="password" type="password" hintText="Password" value={this.state.password} onChange={this.handleChange}/><br />
+            </Col>
+          </Row>
+          <Row>
+          <Col  xsOffset={5} xs={4} className="title_font" >
+            <Button label="Sign Up" disabled={!enabled}  onClick={()=>{this.handleLogin()} } waves='light'>Log In</Button>
+          </Col>
+          </Row>
+    </Grid>
     );
 }
 }

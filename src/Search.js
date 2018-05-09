@@ -29,6 +29,7 @@ class Search extends React.Component {
             ],
             experts:[],
             tags:[],
+            checked_tags:new Set(),
             //for searching
             searchKeywords: "",
             searchCollaborators: [],
@@ -40,9 +41,6 @@ class Search extends React.Component {
         componentDidMount = (event) => {
           axios.get(URL+"/user/",config)
             .then((response)=>{
-              console.log("Success")
-              console.log(response.data.users); // ex.: { user: 'Your User'}
-              console.log(response.status);
               this.setState({
                   suggested_users: [...response["data"]["users"]],
               })
@@ -74,7 +72,7 @@ class Search extends React.Component {
     handleRequestData = () => {
     //call the 3 APIs to get the list of posts, experts, suggested tags
       console.log(this.state.searchKeywords)
-        if(this.state.searchKeywords==""){
+        if(this.state.searchKeywords=="" &&  this.state.collaborator.length==0){
           alert("Please Insert a word in Search ")
           return
         }
@@ -97,9 +95,12 @@ class Search extends React.Component {
             if(newPost["data"]["posts"].length!=0){
                 this.setState({
                     posts: [...newPost["data"]["posts"]],
-                    experts:[...newPost["data"]["experts"]]
+                    experts:[...newPost["data"]["experts"]],
+                    tags:[...newPost["data"]["tags"]]
                 })
-                console.log(newPost["data"]["posts"])
+                console.log("TEST")
+                console.log(newPost["data"])
+                console.log(this.state)
               }
             else{
               console.log("Null Object")
@@ -124,7 +125,12 @@ class Search extends React.Component {
     // add tags to build the search qeury
         console.log('add tag');
     }
-
+    filterTags=(tag)=>{
+      console.log("Filter Tags")
+    }
+    updateTags=(tag)=>(
+      console.log("Adding tag")
+    )
     render() {
         return (
             <Grid>
@@ -142,7 +148,7 @@ class Search extends React.Component {
                   <ResultExperts results={this.state.experts}/>
               </Row>
               <Row>
-                  <Tags/>
+                  <ResultTags results={this.state.tags} filterTag={this.filterTags} updateTags={this.updateTags}/>
               </Row>
             </Grid>
         );
@@ -310,29 +316,30 @@ const ExpertUser = ({display_name, picture, post_count, user_id,username}) => {
       </Row>
   )
 }
+const ResultTags= ({results,filterTags,updateTags}) => {
+    const renderChildTag=result => (
+      <Tags tag={result.tag} filterTags={filterTags} updateTags={updateTags}/>
+    )
+      return(
+        <Col  xsOffset={2} sm={10} >
+          <div class="card tags">
+            <div class="card-content">
+              <span class="card-title">Filter your Tags</span>
+            </div>
+            <div class="card-action margin-bottom-neg">
+              {results.map(renderChildTag)}
+            </div>
+            <div class="card-action">
+            </div>
+          </div>
+        </Col>
+    )
+}
 
-
-class Tags extends React.Component{
-  render(){
+const Tags =({filterTag,tag,updateTags})=>{
   return(
-      <Col  xsOffset={2} sm={10} >
-        <div class="card tags">
-          <div class="card-content">
-            <span class="card-title">Filter your Tags</span>
-          </div>
-          <div class="card-action margin-bottom-neg">
-             <Input name='group1' type='checkbox' value='PressRelease' label='PressRelease' />
-             <Input name='group1' type='checkbox' value='FDA' label='FDA'  className='filled-in' defaultChecked='checked' />
-             <Input name='group1' type='checkbox' value='News' label='News' className='filled-in' defaultChecked='checked' />
-             <Input name='on' type='date' label="Date" onChange={function(e, value) {}} />
-          </div>
-          <div class="card-action">
-          </div>
-        </div>
-      </Col>
-
-
-  )}
+    <Input name='group1' handleCheckboxChange={updateTags} type='checkbox' value={tag} label={tag} />
+  )
 }
 
 

@@ -6,6 +6,7 @@ import Signup from './Signup'
 import Editor from './Editor'
 import Search from './Search'
 import Post from './Post'
+import Team from './Team'
 
 
 // The Main component renders one of the three provided
@@ -21,6 +22,7 @@ const Main = () => (
       <Route path='/signup' component={Signup}/>
       <Route path='/login' component={Login}/>
       <Route path='/editor' component={Editor}/>
+      <Route path='/team' component={Team}/>
       <Route path="/post/:postid" component={Post}/>
 
     </Switch>

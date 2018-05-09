@@ -3,9 +3,32 @@ body {
   padding: 0;
   font-family: 'Nanum Gothic', sans-serif;
 }
+.margin-top{
+  margin-top:140px
+}
+.margin-bottom{
+  margin-bottom:140px
+}
 .margin-bottom-neg{
   margin-bottom: -20px
 }
+.margin-top-neg{
+  margin-top: -20px
+}
 .tag-margin {
-         margin-right: 30px;
+    margin-right: 30px;
+}
+.title_font{
+
+    font-family: 'Yanone Kaffeesatz', sans-serif;
+    font-size: 50px;
+    text-align: justify;
+    text-justify: inter-word;
+}
+.title_font_small{
+
+    font-family: 'Yanone Kaffeesatz', sans-serif;
+    font-size: 30px;
+    text-align: justify;
+    text-justify: inter-word;
 }
