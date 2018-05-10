@@ -5,6 +5,7 @@ import {Autocomplete,Button, Icon, Chip, Input} from 'react-materialize'
 import "./static/css/Index.css"
 import 'react-chat-widget/lib/styles.css';
 import axios from 'axios'
+import { browserHistory } from 'react-router';
 var TOKEN = localStorage.getItem("tokenID");
 
 var URL="http://weeve-api.cornell.tech"
@@ -185,6 +186,7 @@ const ResultCards = ({results}) => {
                 upvotes={result.upvotes}
                 collaborators={result.collaborators}
                 explicit_tags={result.explicit_tags}
+                post_id={result.post_id}
             />
     )
     if (results.length==0){
@@ -229,13 +231,15 @@ const Error = () => {
     );
 };
 
-const ResultCard = ({title, upvotes, collaborators, explicit_tags}) => {
+const ResultCard = ({title, upvotes, collaborators, explicit_tags,post_id}) => {
 
     const addTag = (tag)=>{
       return   <span className="tag-margin"><a href="#">#{tag}</a></span>
     };
 
-
+    const handleClick=(post_id)=>{
+      console.log(post_id)
+    }
     return (
         <div>
           <Col sm={1} align="center" className="margin-top-small">
@@ -248,7 +252,7 @@ const ResultCard = ({title, upvotes, collaborators, explicit_tags}) => {
           </Col>
           <Col sm={11}>
               <div class="card">
-                  <div class="card-content">
+                  <div class="card-content" onClick={handleClick}>
                       <Col sm={9} class="card-title">
                         {title}
                       </Col>

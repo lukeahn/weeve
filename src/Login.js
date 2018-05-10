@@ -46,7 +46,7 @@ class Login extends Component {
         .then(tokenID => {
             console.log(tokenID["token"])
             localStorage.setItem("tokenID", tokenID["token"]);
-            this.props.history.push("/editor");
+            this.props.history.push("/");
         })
     }
 
@@ -78,6 +78,16 @@ render() {
             <Button label="Sign Up" disabled={!enabled}  onClick={()=>{this.handleLogin()} } waves='light'>Log In</Button>
           </Col>
           </Row>
+          <Row>
+             <Col  xsOffset={4} xs={4} className="title_font" >
+              <h2>Do Not Have a Weeve Account?</h2>
+            </Col>
+          </Row>
+            <Row>
+            <Col  xsOffset={5} xs={4} className="title_font" >
+              <Button label="Sign Up"  onClick={()=>{this.props.history.push("/signup")} } waves='light'>Sign Up</Button>
+            </Col>
+            </Row>
     </Grid>
     );
 }

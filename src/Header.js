@@ -14,7 +14,7 @@ const NavLogin = withRouter(({ history }) => (
 ))
 
 const NavSignup = withRouter(({ history }) => (
-<div onClick={() => { history.push('/signup') }}>
+<div onClick={() => {  history.push('/signup') }}>
     Signup
 </div>
 ))
@@ -29,6 +29,7 @@ const NavEditor = withRouter(({ history }) => (
     <div onClick={() => { history.push('/editor') }}>
         Editor
     </div>
+
 ))
 
 const NavProfile = withRouter(({ history }) => (
@@ -64,7 +65,7 @@ class Header extends Component {
 
 
     render() {
-        if (this.state.login === true) {
+        if (localStorage.getItem("tokenID") == null) {
             return <Redirect push to='/login' />
           }
         else

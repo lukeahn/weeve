@@ -1,6 +1,6 @@
 import React from 'react'
 import {Grid, Row, Col, FormGroup, FormControl, ControlLabel} from 'react-bootstrap';
-import {Button, Icon, Chip, Input} from 'react-materialize'
+import {Button, Icon, Chip, Input, Modal} from 'react-materialize'
 import "./index.css"
 var URL="http://weeve.cornell.tech"
 
@@ -22,8 +22,11 @@ export default class Home extends React.Component{
             <Col xsOffset={1} sm={5} className="title_font">
               <h3>Weeve is a knowledge tool leveraging semantic databases that empower teams to express and query their ideas without compromising creativity.</h3>
               <Row >
-                <Col xsOffset={0} sm={12} className="title_font" >
+                <Col xsOffset={0} sm={3} className="title_font" >
                   <Button onClick={()=>{this.handleClick()}} waves='light'>Let's Get Started</Button>
+                </Col>
+                <Col xsOffset={1} sm={3} className="title_font" >
+                  <a href="mailto:mb2589@cornell.edu"><Button  waves='light'>Share with us your Impressions</Button></a>
                 </Col>
               </Row>
             </Col>
