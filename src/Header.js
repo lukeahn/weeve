@@ -1,8 +1,10 @@
 import React, {Component} from 'react'
 import { Link, Redirect,withRouter } from 'react-router-dom'
 import Slider from 'material-ui/Slider';
-import {Button, Grid, Row, Col,Nav, Navbar, NavItem, NavDropdown, MenuItem} from 'react-bootstrap';
+import {SideNav,SideNavItem} from 'react-materialize'
+import {Button, Grid, Row, Col,Nav,  NavDropdown, MenuItem,Navbar, NavItem} from 'react-bootstrap';
 import logo from './Pictures/weeve.png';
+import user_info from './Pictures/user_info.png'
 
 
 
@@ -44,6 +46,12 @@ const NavAboutUs = withRouter(({ history }) => (
     </div>
 ))
 
+const NavLogOut = withRouter(({ history }) => (
+    <div onClick={() => {localStorage.clear();history.push('/home') }}>
+        Log Out
+    </div>
+))
+
 
 
 class Header extends Component {
@@ -75,6 +83,28 @@ class Header extends Component {
             <Navbar inverse collapseOnSelect>
 
                 <Navbar.Collapse>
+                  <Nav>
+                    <NavItem >
+                        <SideNav
+                        trigger={<img style={{height:30, weight:30}} src={user_info} alt="weeve"/>}
+                        options={{ closeOnClick: true }}
+                        >
+                        <SideNavItem userView
+                          user={{
+                            background: 'http://www.oxygenna.com/wp-content/uploads/2015/11/18.jpg',
+                            image: require("./Pictures/jill.png"),
+                            name: 'John Doe',
+                            email: 'jdandturk@gmail.com'
+                          }}
+                        />
+                        <SideNavItem href='#!icon' icon='cloud'>First Link With Icon</SideNavItem>
+                        <SideNavItem href='#!second'>Second Link</SideNavItem>
+                        <SideNavItem divider />
+                        <SideNavItem subheader>Subheader</SideNavItem>
+                        <SideNavItem waves href='#!third'>Third Link With Waves</SideNavItem>
+                      </SideNav>
+                    </NavItem>
+                  </Nav>
                     <Nav>
                         <NavItem href="/">
                            <img style={{height:30, weight:30}} src={logo} alt="weeve"/>
@@ -98,6 +128,11 @@ class Header extends Component {
                     <Nav pullRight>
                         <NavItem >
                             <NavProfile />
+                        </NavItem>
+                    </Nav>
+                    <Nav pullRight>
+                        <NavItem >
+                            <NavLogOut />
                         </NavItem>
                     </Nav>
                 </Navbar.Collapse>

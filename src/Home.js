@@ -8,7 +8,7 @@ export default class Home extends React.Component{
 
   handleClick = event => {
       // event.preventDefault();
-      this.props.history.push("/signup");
+      this.props.history.push("/editor");
   }
   render(){
     return (
